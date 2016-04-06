@@ -4,5 +4,10 @@
 
 | Langage | Framework  | Commentaire  | Résultats  |
 |---|---|---|---|---|
-| Java | Spring |   |   |   |
-| Java | Java EE 7 (EJB)  |   |   |   |
+| Java 8| Spring |   |   |   |
+| Java 8 | Java EE 7 (EJB)  |   |   |   |
+| Java 8| Rapidoid |   |   |   |
+| Java 9|  |   |  Recoder serveur HTTP |   |
+| Python 3|---|---|Recoder serveur HTTP|---|
+| Python 3|Flask|---|---|---|
+| Node.js | Express |   |  Recoder serveur HTTP |   |
