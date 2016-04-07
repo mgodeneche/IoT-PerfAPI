@@ -50,6 +50,6 @@ def perfTest(tries):
 		#print STRING2
 
 if __name__ == "__main__":
-	app.run()
+	app.run(threaded=True)
 
 
