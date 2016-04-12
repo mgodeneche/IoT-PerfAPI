@@ -5,44 +5,32 @@ import time
 
 app = Flask(__name__)
 TOTAL_MESSAGE = 100000
-global globalData = []
-global globalDataOpti = collections.deque(maxlen=TOTAL_MESSAGE)
-global globalIndex = collections.deque(maxlen=TOTAL_MESSAGE)
+globalData = deque(maxlen=TOTAL_MESSAGE)
+globalIndex = deque(maxlen=TOTAL_MESSAGE)
+
 
 @app.route("/receiveMessage", methods=['POST'])
 def receiveMessage():
-	messageId = request.form['id']
-	messageTS = request.form['timestamp']
-	sensorType  = request.form['sensorType']
-	sensorValue = request.form['value']
+	messageId,data = request.form['id'],[request.form['id'],request.form['timestamp'],request.form['sensorType'],request.form['value']
 	if(alreadyExist(messageId)):
-		return 0
+		return 202
+	addDataToGlobalData(data)
+	return 201
 
-	return 200
-def receiveMessages():
-	messageId,messageTS,sensorType,sensorValue = request.form['id'],request.form['timestamp'],request.form['sensorType'],request.form['value']
-	if(alreadyExistOpti(messageId)):
-		return 0
-	return 200
-
-@app.route("/messages/synthesis",methods=['GET']
+@app.route("/messages/synthesis",methods=['GET'])
 def getSynthesis():
-	return 0
+	for(item in globalData):
+
+		
 
 def addDataToGlobalData(data):
-	globalData.append(data)
-	return 0
-
-def addDataToGlobalDataOpti(data):
 	globalDataOpti.append(data)
-	return 0
+	globalIndex.append(data.messageId)
+	return True
 
 def alreadyExist(messageId):
-	#check existence dans l'index
-	return False
-
-def alreadyExistOpti(messageId):
-	#check existence dans l'index opti
+	if(messageId in globalIndex):
+		return True
 	return False
 
 #Methode qui renvoie la liste des datas de la dernière heure afin de les traiter
@@ -51,6 +39,19 @@ def listLastHourSensorData(timestamp):
 #Construit le message JSON 
 def buildSynthesis():
 	return 0
+
+def getAllAggregations():
+	allAggregations = []
+	for sensorTypeId in globalData:
+		allAggregations.append(getAllMessagesFromSensorType)
+		#todo : min / max / moy
+
+def getAllMessagesFromSensorType(sensorTypeId):
+	sensorTypeAggregation = []
+	for item in globalData:
+		if(item['sensorType']==sensorTypeId):
+			sensorTypeAggregation.append(item)
+	return sensorTypeAggregation
 
 if __name__ == "__main__":
 	#app.run(threaded=True)
