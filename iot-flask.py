@@ -4,8 +4,10 @@ from collections import deque
 import time
 
 app = Flask(__name__)
+TOTAL_MESSAGE = 100000
 global globalData = []
-global globalDataOpti = collections.deque(maxlen=100000)
+global globalDataOpti = collections.deque(maxlen=TOTAL_MESSAGE)
+global globalIndex = collections.deque(maxlen=TOTAL_MESSAGE)
 
 @app.route("/receiveMessage", methods=['POST'])
 def receiveMessage():
@@ -13,9 +15,14 @@ def receiveMessage():
 	messageTS = request.form['timestamp']
 	sensorType  = request.form['sensorType']
 	sensorValue = request.form['value']
+	if(alreadyExist(messageId)):
+		return 0
+
 	return 200
 def receiveMessages():
 	messageId,messageTS,sensorType,sensorValue = request.form['id'],request.form['timestamp'],request.form['sensorType'],request.form['value']
+	if(alreadyExistOpti(messageId)):
+		return 0
 	return 200
 
 @app.route("/messages/synthesis",methods=['GET']
@@ -28,6 +35,15 @@ def addDataToGlobalData(data):
 
 def addDataToGlobalDataOpti(data):
 	globalDataOpti.append(data)
+	return 0
+
+def alreadyExist(messageId):
+	#check existence dans l'index
+	return False
+
+def alreadyExistOpti(messageId):
+	#check existence dans l'index opti
+	return False
 
 #Methode qui renvoie la liste des datas de la dernière heure afin de les traiter
 def listLastHourSensorData(timestamp):
